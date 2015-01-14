@@ -45,6 +45,7 @@ The nano local.py commant requires to at least change database connection info.
 Change admin password (since all pwds are blanked)
 --------------------------------------------------
 # python manage.py shell
+>>> from django.contrib.auth.models import User
 >>> users = User.objects.all()
 >>> user = users[0]
 >>> user.set_password('dndtools')
