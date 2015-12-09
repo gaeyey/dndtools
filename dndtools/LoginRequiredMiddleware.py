@@ -1,10 +1,21 @@
-from django.http import HttpResponseRedirect
+# -*- coding: UTF-8 -*-
+
+# django dependencies
+from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth import REDIRECT_FIELD_NAME
+# from django.http import HttpResponseRedirect
 from django.conf import settings
+
+# python dependencies
 from re import compile
+
+#---#
 
 EXEMPT_URLS = [compile(settings.LOGIN_URL.lstrip('/'))]
 if hasattr(settings, 'LOGIN_EXEMPT_URLS'):
     EXEMPT_URLS += [compile(expr) for expr in settings.LOGIN_EXEMPT_URLS]
+
+#---#
 
 class LoginRequiredMiddleware:
     """
@@ -25,5 +36,13 @@ class LoginRequiredMiddleware:
  'django.core.context_processors.auth'."
         if not request.user.is_authenticated():
             path = request.path_info.lstrip('/')
-            if not any(m.match(path) for m in EXEMPT_URLS):
-                return HttpResponseRedirect(settings.LOGIN_URL)
+            if not any(m.match(path) for m in EXEMPT_URLS): 
+                next = ""
+                if request.GET:  
+                    next = request.GET['next']
+                path = request.get_full_path()
+                if next == "":
+                    return redirect_to_login(path, settings.LOGIN_URL, REDIRECT_FIELD_NAME)
+                else:
+                    return HttpResponseRedirect(path)
+#---#

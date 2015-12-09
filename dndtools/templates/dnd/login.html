@@ -7,8 +7,11 @@
 
     <body>
         <h1>Login</h1>
-
-        <form id="login_form" method="post" action="/login/">
+        {% if next %}
+        <form id="login_form" action="/login/?next={{next}}" method="post" >
+        {%else%}
+        <form id="login_form" action="/login/" method="post" >
+        {% endif %}        
             {% csrf_token %}
             Username: <input type="text" name="username" value="" size="50" />
             <br />

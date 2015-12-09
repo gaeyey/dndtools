@@ -162,7 +162,16 @@ def very_secret_url(request):
 def user_login(request):
     # Like before, obtain the context for the user's request.
     context = RequestContext(request)
+    
+    next = ""
 
+    if request.GET:  
+        next = request.GET['next']
+        
+    if request.user.is_authenticated():
+        if next != "":
+            return HttpResponseRedirect(next);
+    
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
         # Gather the username and password provided by the user.
@@ -184,7 +193,10 @@ def user_login(request):
                 # We'll send the user back to the homepage.
                 login(request, user)
 				
-                return HttpResponseRedirect('/')
+                if next == "":
+                    return HttpResponseRedirect('/')
+                else:
+                    return HttpResponseRedirect(next)                
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your account is disabled.")
@@ -198,7 +210,10 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render_to_response('dnd/login.html', {}, context)
+         if next == "":
+            return render_to_response('dnd/login.html', {}, context)
+         else:
+            return render_to_response('dnd/login.html', {'next': next }, context)
 
 # Use the login_required() decorator to ensure only those logged in can access the view.
 @login_required
