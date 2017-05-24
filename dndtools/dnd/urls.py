@@ -74,6 +74,10 @@ urlpatterns = patterns(
     (r'^rss.xml$', AdminLogFeed()),
     (r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}),
 
+	#login
+	url(r'^login/$', 'user_login', name='login'),
+	url(r'^logout/$', 'user_logout', name='logout'),
+	
     # job
     url(
         r'^very_secret_url/$',

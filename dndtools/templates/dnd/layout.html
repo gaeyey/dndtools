@@ -67,6 +67,15 @@
 
                 <h2>Feats. Spells. Prestige Classes. And more!</h2>
             </div>
+			<div style="position: relative; left:300px;" >
+				{% if user.is_authenticated %}				
+				<h3>{{ user.username }}</h3>
+				<a href="/logout/">Logout</a><br />
+				{% else %}				
+				<a href="/login/">Login</a><br />
+				{% endif %}
+			</div>
+			
             {# Google search engine  #}
             {% if not debug %}
                 <div id="google-search-holder">
