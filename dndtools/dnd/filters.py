@@ -34,6 +34,13 @@ def race_choices(unknown_entry=True):
         race_choices.insert(0, ('', 'Any'))
 
     return race_choices
+    
+def skill_choices(unknown_entry=True):
+    skill_choices = [(skill.id, skill.name) for skill in Skill.objects.all()]
+    if unknown_entry:
+        skill_choices.insert(0, ('', 'Any'))
+    
+    return skill_choices
 
 def spell_level_choices():
     spell_level_choices = [(i, i) for i in range(0, 10)]
@@ -262,13 +269,16 @@ class CharacterClassFilter(django_filters2.FilterSet):
     required_races__race = django_filters2.ChoiceFilter(
         label='Race', choices=race_choices()
     )
+    required_skills__skill = django_filters2.MultipleChoiceFilter(
+        label='Skills', choices=skill_choices()
+    )
 
     class Meta:
         model = CharacterClass
         fields = ['character_class__name', 'rulebook__slug', 'rulebook__dnd_edition__slug',
                   'character_class__prestige',
                   'required_bab', 'skill_points',
-                  'class_features', 'hit_die', 'required_races__race', ]
+                  'class_features', 'hit_die', 'required_races__race', 'required_skills__skill']
 
 
 class RulebookFilter(django_filters2.FilterSet):
