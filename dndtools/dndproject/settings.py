@@ -27,6 +27,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+	'LoginRequiredMiddleware.LoginRequiredMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
@@ -51,12 +52,15 @@ INSTALLED_APPS = (
     'south',
     'debug_toolbar',
     'django.contrib.sitemaps',
+	'LoginRequiredMiddleware',
 )
 
 SERVER_EMAIL = 'error@dndtools.eu'
 USE_TZ = False
 
 # LOCAL PY
+
+LOGIN_URL = '/login'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
